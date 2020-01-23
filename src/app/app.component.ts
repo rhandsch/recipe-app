@@ -12,5 +12,6 @@ export class AppComponent {
 
   onFeatureSelected(feature: string) {
     this.selectedFeature = feature;
+    console.log('selected feature', feature);
   }
 }
