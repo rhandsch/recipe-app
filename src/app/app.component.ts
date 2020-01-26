@@ -8,10 +8,4 @@ import {Component} from '@angular/core';
 export class AppComponent {
   title = 'recipe-app';
 
-  selectedFeature = 'showRecipes'; // or 'showShoppingList'
-
-  onFeatureSelected(feature: string) {
-    this.selectedFeature = feature;
-    console.log('selected feature', feature);
-  }
 }
