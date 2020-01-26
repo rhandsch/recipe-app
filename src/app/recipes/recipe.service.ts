@@ -1,5 +1,5 @@
 import {Recipe} from './recipe.model';
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Ingredient} from '../shared/ingredients.model';
 import {ShoppingListService} from '../shopping-list/shopping-list.service';
 
@@ -19,18 +19,11 @@ export class RecipeService {
         new Ingredient('Knoblauch', 3)])
   ];
 
-  @Output() recipeSelected = new EventEmitter<Recipe>();
-
   constructor(private shoppingListService: ShoppingListService) {
   }
 
   getRecipes(): Recipe[] {
     return this.recipes.slice();
-  }
-
-  onRecipeSelected(recipe: Recipe) {
-    console.log('onRecipeSelected:', recipe);
-    this.recipeSelected.emit(recipe);
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
