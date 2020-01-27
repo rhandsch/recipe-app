@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Recipe} from '../recipe.model';
 import {RecipeService} from '../recipe.service';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -28,4 +29,19 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
+  onSubmit(f: NgForm) {
+    console.log(f);
+    console.log('valid:', f.valid, 'dirty:', f.dirty);
+    console.log('value:', f.value);
+
+    if (f.valid) {
+      this.recipe.name = f.value.name;
+      this.recipe.description = f.value.description;
+      this.recipe.imagePath = f.value.imagePath;
+    }
+  }
+
+  onReset(f: NgForm) {
+    f.reset(this.recipe);
+  }
 }
