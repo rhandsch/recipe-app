@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Recipe} from '../recipe.model';
 import {RecipeService} from '../recipe.service';
@@ -13,6 +13,7 @@ export class RecipeEditComponent implements OnInit {
   recipeIndex: number;
   editMode = false;
   recipe: Recipe;
+  @ViewChild('f', {static: false}) f: NgForm;
 
   constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService) {
   }
@@ -29,19 +30,19 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
-  onSubmit(f: NgForm) {
-    console.log(f);
-    console.log('valid:', f.valid, 'dirty:', f.dirty);
-    console.log('value:', f.value);
+  onSubmit() {
+    console.log(this.f);
+    console.log('valid:', this.f.valid, 'dirty:', this.f.dirty);
+    console.log('value:', this.f.value);
 
-    if (f.valid) {
-      this.recipe.name = f.value.name;
-      this.recipe.description = f.value.description;
-      this.recipe.imagePath = f.value.imagePath;
+    if (this.f.valid) {
+      this.recipe.name = this.f.value.name;
+      this.recipe.description = this.f.value.description;
+      this.recipe.imagePath = this.f.value.imagePath;
     }
   }
 
-  onReset(f: NgForm) {
-    f.reset(this.recipe);
+  onReset() {
+    this.f.reset(this.recipe);
   }
 }

@@ -1,5 +1,5 @@
 <div class="row">
-  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+  <form (ngSubmit)="onSubmit()" #f="ngForm">
     <div class="form-group">
       <label for="name">Name:</label>
       <input id="name" name="name" type="text" class="form-control" [ngModel]="recipe.name" required #nameElement="ngModel">
@@ -14,6 +14,6 @@
       <input id="imagePath" name="imagePath" type="text" class="form-control" [ngModel]="recipe.imagePath">
     </div>
     <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Save</button>
-    <button class="btn btn-default" type="button" (click)="onReset(f)">Reset</button>
+    <button class="btn btn-default" type="button" (click)="onReset()">Reset</button>
   </form>
 </div>
