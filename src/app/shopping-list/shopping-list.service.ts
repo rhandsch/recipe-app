@@ -8,6 +8,7 @@ export class ShoppingListService {
   ];
 
   ingredientsChanged = new Subject<Ingredient[]>();
+  ingredientSelected = new Subject<Ingredient>();
 
   getIngredients() {
     return this.ingredients.slice();
@@ -22,6 +23,18 @@ export class ShoppingListService {
   addIngredients(ingredients: Ingredient[]) {
     // ingredients.forEach((ingredient: Ingredient) => this.addIngredient(ingredient));
     this.ingredients.push(...ingredients);
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  selectIngredient(index: number) {
+    console.log('selected ingredient with index ' + index);
+    this.ingredientSelected.next(this.ingredients[index]);
+  }
+
+  deleteIngredient(ingredient: Ingredient) {
+    const index = this.ingredients.indexOf(ingredient);
+    console.log('deleting ingredient with index ' + index, ingredient);
+    this.ingredients.splice(index, 1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
