@@ -1,19 +1,51 @@
 <div class="row">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
+    <div class="row">
       <label for="name">Name:</label>
       <input id="name" formControlName="name" type="text" class="form-control">
       <span class="help-block" *ngIf="!form.get('name').valid && form.get('name').touched">Please enter a valid Name</span>
     </div>
-    <div class="form-group">
+    <div class="row">
       <label for="description">Description</label>
-      <input id="description" formControlName="description" type="text" class="form-control">
+      <textarea id="description" formControlName="description" type="text" class="form-control" rows="6"></textarea>
     </div>
-    <div class="form-group">
-      <label for="imagePath">Image path:</label>
-      <input id="imagePath" formControlName="imagePath" type="text" class="form-control">
+    <div class="row">
+      <label for="imagePath">Image URL:</label>
+      <input id="imagePath" formControlName="imagePath" type="text" class="form-control" #imagePath>
     </div>
-    <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Save</button>
-    <button class="btn btn-default" type="button" (click)="onReset()">Reset</button>
+    <div>
+      <img [src]="imagePath.value" class="img-responsive">
+    </div>
+
+    <div class="row">
+      <h5>Ingredients:</h5>
+      <div class="col-xs-12" formArrayName="ingredients">
+        <div class="row mt-2"
+             *ngFor="let ingredientFormGroup of ingredientControls; let i = index"
+             [formGroupName]="i">
+          <div class="col-xs-8">
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="col-xs-2">
+            <input type="number" class="form-control" formControlName="amount">
+          </div>
+          <div class="col-xs-2">
+            <button class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-xs-10"></div>
+          <div class="col-xs-2">
+            <button class="btn btn-success" type="button" (click)="addIngredient()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-6">
+      <button class="btn btn-primary mr-2" type="submit" [disabled]="!form.valid">Save</button>
+      <button class="btn btn-default mr-2" type="button" (click)="onReset()">Reset</button>
+      <button class="btn btn-warning" type="button" (click)="onCancel()">Cancel</button>
+    </div>
   </form>
 </div>
