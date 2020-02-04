@@ -16,6 +16,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {RecipeStartComponent} from './recipes/recipe-start/recipe-start.component';
 import {RecipeEditComponent} from './recipes/recipe-edit/recipe-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {LoggingInterceptorService} from './logging-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -35,11 +37,17 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     RecipeService,
-    ShoppingListService
+    ShoppingListService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoggingInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
