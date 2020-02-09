@@ -5,6 +5,7 @@ import {ShoppingListService} from '../shopping-list/shopping-list.service';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable()
 export class RecipeService {
@@ -28,8 +29,14 @@ export class RecipeService {
   ];
   private recipesFetched = false;
 
-  constructor(private http: HttpClient, private shoppingListService: ShoppingListService) {
-    this.fetchRecipes().subscribe();
+  constructor(private http: HttpClient,
+              private shoppingListService: ShoppingListService,
+              private authService: AuthService) {
+    authService.userChanged.subscribe(user => {
+      if (user) {
+        this.fetchRecipes().subscribe();
+      }
+    });
   }
 
   getRecipes(): Recipe[] {
@@ -43,12 +50,13 @@ export class RecipeService {
   loadRecipeByIndex(index: number) {
     if (!this.recipesFetched) {
       console.log('recipes not yet fetched');
-      return new Promise<Recipe>(resolve => {
+      const promise = new Promise<Recipe>(resolve => {
         this.recipesChanged.subscribe(recipes => {
           console.log('got recipesChanged, loading recipe #' + index);
           resolve(recipes[index]);
         });
       });
+      return promise;
     }
 
     console.log('loading recipe #' + index);
@@ -80,7 +88,8 @@ export class RecipeService {
 
   fetchRecipes() {
     console.log('start fetching recipes');
-    return this.http.get<Recipe[]>(this.firebaseRecipesUrl + this.firebaseUrlPostfix)
+    return this.http
+      .get<Recipe[]>(this.firebaseRecipesUrl + this.firebaseUrlPostfix)
       .pipe(
         map(recipes =>
           recipes.map(recipe => {
