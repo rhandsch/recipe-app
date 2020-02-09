@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class RecipeService {
 
   recipesChanged = new Subject<Recipe[]>();
