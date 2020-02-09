@@ -6,7 +6,6 @@ import {HeaderComponent} from './header/header.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LoggingInterceptorService} from './logging-interceptor.service';
-import {RecipesModule} from './recipes/recipes.module';
 import {ShoppingListModule} from './shopping-list/shopping-list.module';
 import {SharedModule} from './shared/shared.module';
 import {AuthModule} from './auth/auth.module';
@@ -22,7 +21,6 @@ import {AuthModule} from './auth/auth.module';
     HttpClientModule,
     SharedModule,
     AuthModule,
-    RecipesModule,
     ShoppingListModule
   ],
   providers: [

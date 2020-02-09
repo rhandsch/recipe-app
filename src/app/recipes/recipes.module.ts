@@ -9,7 +9,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RecipesRoutingModule} from './recipes-routing.module';
 import {SharedModule} from '../shared/shared.module';
 
-
 @NgModule({
   declarations: [
     RecipesComponent,
@@ -26,5 +25,6 @@ import {SharedModule} from '../shared/shared.module';
     RecipesRoutingModule
   ]
 })
+
 export class RecipesModule {
 }
