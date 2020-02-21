@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {AuthComponent} from './auth.component';
 
 const authRoutes: Routes = [
-  {path: 'auth', component: AuthComponent}
+  {path: '', component: AuthComponent}
 ];
 
 @NgModule({
