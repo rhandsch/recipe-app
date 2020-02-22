@@ -4,6 +4,7 @@ import {catchError, tap} from 'rxjs/operators';
 import {BehaviorSubject, Subject, throwError} from 'rxjs';
 import {User} from './user.model';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 export interface AuthResponseData {
   idToken: string; // A Firebase Auth ID token for the newly created user.
@@ -14,15 +15,14 @@ export interface AuthResponseData {
   registered?: boolean; // Whether the email is for an existing account
 }
 
-const FIREBASE_APIKEY_PARAM = 'key=AIzaSyDHxVf7fEo4PYrty61ok3UJv69a0lHE_KY';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
   userChanged = new BehaviorSubject<User>(null);
 
-  private readonly SIGNUP_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?' + FIREBASE_APIKEY_PARAM;
-  private readonly LOGIN_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?' + FIREBASE_APIKEY_PARAM;
+  private readonly SIGNUP_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseApiKey;
+  private readonly LOGIN_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseApiKey;
   private readonly LOCALSTORAGE_USERDATA_KEY = 'userData';
 
   private tokenExpirationTimer;
