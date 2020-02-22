@@ -1,11 +1,13 @@
 import {Recipe} from './recipe.model';
 import {Injectable} from '@angular/core';
 import {Ingredient} from '../shared/ingredients.model';
-import {ShoppingListService} from '../shopping-list/shopping-list.service';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
+import {Store} from '@ngrx/store';
+import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
+import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
 
 @Injectable({providedIn: 'root'})
 export class RecipeService {
@@ -30,8 +32,8 @@ export class RecipeService {
   private recipesFetched = false;
 
   constructor(private http: HttpClient,
-              private shoppingListService: ShoppingListService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private store: Store<fromShoppingList.AppState>) {
     authService.userChanged.subscribe(user => {
       if (user) {
         this.fetchRecipes().subscribe();
@@ -44,7 +46,7 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addIngredients(ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 
   loadRecipeByIndex(index: number) {
