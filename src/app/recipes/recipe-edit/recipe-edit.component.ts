@@ -56,7 +56,7 @@ export class RecipeEditComponent implements OnInit {
     this.initForm();
   }
 
-  onSubmit(recipe: Recipe) {
+  onSubmit() {
     console.log(this.form);
     console.log('valid:', this.form.valid, 'dirty:', this.form.dirty);
     console.log('value:', this.form.value);
