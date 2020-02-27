@@ -7,7 +7,7 @@ import {map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
 import {Store} from '@ngrx/store';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
-import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
+import {AppState} from '../store/app.reducer';
 
 @Injectable({providedIn: 'root'})
 export class RecipeService {
@@ -33,12 +33,14 @@ export class RecipeService {
 
   constructor(private http: HttpClient,
               private authService: AuthService,
-              private store: Store<fromShoppingList.AppState>) {
-    authService.userChanged.subscribe(user => {
-      if (user) {
-        this.fetchRecipes().subscribe();
-      }
-    });
+              private store: Store<AppState>) {
+    store.select('auth')
+      .pipe(map(authState => authState.user))
+      .subscribe(user => {
+        if (user) {
+          this.fetchRecipes().subscribe();
+        }
+      });
   }
 
   getRecipes(): Recipe[] {

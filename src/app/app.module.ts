@@ -9,7 +9,7 @@ import {LoggingInterceptorService} from './logging-interceptor.service';
 import {SharedModule} from './shared/shared.module';
 import {AuthInterceptorService} from './auth/auth-interceptor.service';
 import {StoreModule} from '@ngrx/store';
-import {shoppinglistReducer} from './shopping-list/store/shopping-list.reducer';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import {shoppinglistReducer} from './shopping-list/store/shopping-list.reducer';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot({shoppingList: shoppinglistReducer}),
+    StoreModule.forRoot(fromApp.appReducer),
     SharedModule
   ],
   providers: [
