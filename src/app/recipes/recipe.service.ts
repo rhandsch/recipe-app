@@ -4,7 +4,6 @@ import {Ingredient} from '../shared/ingredients.model';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
-import {AuthService} from '../auth/auth.service';
 import {Store} from '@ngrx/store';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
 import {AppState} from '../store/app.reducer';
@@ -32,7 +31,6 @@ export class RecipeService {
   private recipesFetched = false;
 
   constructor(private http: HttpClient,
-              private authService: AuthService,
               private store: Store<AppState>) {
     store.select('auth')
       .pipe(map(authState => authState.user))
