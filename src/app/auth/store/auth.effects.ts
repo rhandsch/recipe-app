@@ -1,5 +1,6 @@
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import * as AuthActions from './auth.actions';
+import {AuthSuccess} from './auth.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {AuthService} from '../auth.service';
@@ -46,9 +47,8 @@ export class AuthEffects {
         .post<AuthResponseData>(LOGIN_URL,
           {email: authData.payload.email, password: authData.payload.password, returnSecureToken: true})
         .pipe(
-          map(authResponse => new AuthActions.AuthSuccess(this.handleAuthentication(authResponse))),
-          catchError(errorRes => of(new AuthActions.AuthFail(handleError(errorRes)))))
-        ;
+          map(authResponse => new AuthActions.AuthSuccess({user: this.handleAuthentication(authResponse), doRedirect: true})),
+          catchError(errorRes => of(new AuthActions.AuthFail(handleError(errorRes)))));
     })
   );
 
@@ -60,7 +60,7 @@ export class AuthEffects {
         .post<AuthResponseData>(SIGNUP_URL,
           {email: authData.payload.email, password: authData.payload.password, returnSecureToken: true})
         .pipe(
-          map(authResponse => new AuthActions.AuthSuccess(this.handleAuthentication(authResponse))),
+          map(authResponse => new AuthActions.AuthSuccess({user: this.handleAuthentication(authResponse), doRedirect: true})),
           catchError(errorRes => of(new AuthActions.AuthFail(handleError(errorRes)))))
         ;
     })
@@ -69,8 +69,10 @@ export class AuthEffects {
   @Effect({dispatch: false})
   authSuccess = this.actions$.pipe(
     ofType(AuthActions.AUTH_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/']);
+    tap((authSuccess: AuthSuccess) => {
+      if (authSuccess.payload.doRedirect) {
+        this.router.navigate(['/']);
+      }
     })
   );
 
@@ -92,7 +94,7 @@ export class AuthEffects {
           const leftExpirationMillis = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           this.authService.setLogoutTimer(leftExpirationMillis);
 
-          return new AuthActions.AuthSuccess(loadedUser);
+          return new AuthActions.AuthSuccess({user: loadedUser, doRedirect: false});
         }
       }
       return {type: 'DUMMY'};

@@ -1,26 +1,37 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Injectable} from '@angular/core';
 import {Recipe} from './recipe.model';
-import {RecipeService} from './recipe.service';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {AppState} from '../store/app.reducer';
+import {map, switchMap, take} from 'rxjs/operators';
+import {Actions, ofType} from '@ngrx/effects';
+import * as RecipeActions from './store/recipe.actions';
 
 @Injectable({providedIn: 'root'})
 export class RecipesResolverService implements Resolve<Recipe[]> {
 
-  private recipesFetched = false;
-
-  constructor(private recipeService: RecipeService) {
+  constructor(private store: Store<AppState>, private actions$: Actions) {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Recipe[]> | Promise<Recipe[]> | Recipe[] {
-    if (this.recipesFetched) {
-      console.log('resolving recipes');
-      return this.recipeService.getRecipes();
-    } else {
-      console.log('fetching recipes');
-      this.recipesFetched = true;
-      return this.recipeService.fetchRecipes();
-    }
+    return this.store.select('recipe').pipe(
+      take(1),
+      switchMap(recipeState => {
+        if (recipeState.recipesFetched) {
+          return of(recipeState.recipes);
+        } else {
+          // Recipes not yet fetched -> wait for fetched action.
+          console.log('  recipes not yet fetched -> fetching and waiting for RECIPES_FETCHED');
+          this.store.dispatch(new RecipeActions.FetchRecipes());
+          return this.actions$.pipe(
+            ofType(RecipeActions.RECIPES_FETCHED),
+            take(1),
+            map((recipeFetched: RecipeActions.RecipesFetched) => recipeFetched.payload)
+          );
+        }
+      })
+    );
   }
 
 }

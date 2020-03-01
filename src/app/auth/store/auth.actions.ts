@@ -26,7 +26,7 @@ export class LoginStart implements Action {
 export class AuthSuccess implements Action {
   readonly type = AUTH_SUCCESS;
 
-  constructor(public payload: User) {
+  constructor(public payload: { user: User, doRedirect: boolean }) {
   }
 }
 

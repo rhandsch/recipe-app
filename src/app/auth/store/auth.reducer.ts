@@ -1,6 +1,5 @@
 import {User} from '../user.model';
 import * as AuthActions from './auth.actions';
-import {act} from '@ngrx/effects';
 
 export interface State {
   user: User;
@@ -15,7 +14,6 @@ const initialState: State = {
 };
 
 export function authReducer(state: State = initialState, action: AuthActions.AuthActions) {
-  console.log('reducing', action);
   switch (action.type) {
     case AuthActions.SIGNUP_START:
     case AuthActions.LOGIN_START:
@@ -27,7 +25,7 @@ export function authReducer(state: State = initialState, action: AuthActions.Aut
     case AuthActions.AUTH_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
         authError: null,
         loading: false
       };
