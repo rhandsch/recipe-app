@@ -1,6 +1,6 @@
 import {Recipe} from '../recipe.model';
-import * as RecipeActions from './recipe.actions';
-import {ADD_RECIPE, DELETE_RECIPE, FETCH_RECIPES, RECIPES_FETCHED, UPDATE_RECIPE} from './recipe.actions';
+import {Action, createReducer, on} from '@ngrx/store';
+import * as RecipesActions from '../store/recipe.actions';
 
 export interface State {
   recipes: Recipe[];
@@ -12,42 +12,33 @@ const initialState: State = {
   recipesFetched: false
 };
 
-export function recipeReducer(state: State = initialState, action: RecipeActions.RecipeActions) {
-  switch (action.type) {
-    case FETCH_RECIPES:
-      return {
+export function recipeReducer(recipeState: State | undefined, recipeAction: Action) {
+  return createReducer(
+    initialState,
+    on(RecipesActions.fetchRecipes, state => ({
+      ...state,
+      recipes: [],
+      recipesFetched: false
+    })),
+    on(RecipesActions.recipesFetched, (state, action) => ({
+      ...state,
+      recipes: [...action.recipes],
+      recipesFetched: true
+    })),
+    on(RecipesActions.addRecipe,
+      (state, action) => ({
         ...state,
-        recipes: [],
-        recipesFetched: false
-      };
-    case RECIPES_FETCHED:
-      return {
+        recipes: state.recipes.concat({...action.recipe})
+      })),
+    on(RecipesActions.updateRecipe,
+      (state, action) => ({
         ...state,
-        recipes: action.payload,
-        recipesFetched: true
-      };
-    case DELETE_RECIPE:
-      return {
+        recipes: state.recipes.map((recipe, index) => index === action.index ? {...action.recipe} : recipe)
+      })),
+    on(RecipesActions.deleteRecipe,
+      (state, action) => ({
         ...state,
-        recipes: state.recipes.filter((recipe, index) => index !== action.payload)
-      };
-    case UPDATE_RECIPE:
-      const updatedRecipe = {
-        ...state.recipes[action.payload.index],
-        ...action.payload.recipe
-      };
-      const updatedRecipes = [...state.recipes];
-      updatedRecipes[action.payload.index] = updatedRecipe;
-      return {
-        ...state,
-        recipes: updatedRecipes
-      };
-    case ADD_RECIPE:
-      return {
-        ...state,
-        recipes: [...state.recipes, action.payload]
-      };
-    default:
-      return state;
-  }
+        recipes: state.recipes.filter((recipe, index) => index !== action.index)
+      }))
+  )(recipeState, recipeAction);
 }

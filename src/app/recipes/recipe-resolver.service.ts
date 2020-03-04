@@ -25,11 +25,11 @@ export class RecipeResolverService implements Resolve<Recipe> {
         } else {
           // Recipes not yet fetched -> wait for fetched action.
           console.log('  recipes not yet fetched -> fetching and waiting for RECIPES_FETCHED');
-          this.store.dispatch(new RecipeActions.FetchRecipes());
+          this.store.dispatch(RecipeActions.fetchRecipes());
           return this.actions$.pipe(
-            ofType(RecipeActions.RECIPES_FETCHED),
+            ofType(RecipeActions.recipesFetched),
             take(1),
-            map((recipeFetched: RecipeActions.RecipesFetched) => recipeFetched.payload)
+            map(action => action.recipes)
           );
         }
       }),

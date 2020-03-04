@@ -30,7 +30,7 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onSendToShoppingList() {
-    this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
+    this.store.dispatch(ShoppingListActions.addIngredients({ingredients: this.recipe.ingredients}));
     this.router.navigate(['/shopping-list']);
   }
 
@@ -39,7 +39,7 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onDelete() {
-    this.store.dispatch(new RecipeActions.DeleteRecipe(this.recipeIndex));
+    this.store.dispatch(RecipeActions.deleteRecipe({index: this.recipeIndex}));
     this.router.navigate(['/recipes']);
   }
 }

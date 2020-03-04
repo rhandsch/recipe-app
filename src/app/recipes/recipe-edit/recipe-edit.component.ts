@@ -59,9 +59,9 @@ export class RecipeEditComponent implements OnInit {
       this.recipe.description = this.form.value.description;
       this.recipe.imagePath = this.form.value.imagePath;
       if (this.editMode) {
-        this.store.dispatch(new RecipeActions.UpdateRecipe({index: this.recipeIndex, recipe: this.form.value}));
+        this.store.dispatch(RecipeActions.updateRecipe({index: this.recipeIndex, recipe: this.form.value}));
       } else {
-        this.store.dispatch(new RecipeActions.AddRecipe(this.recipe));
+        this.store.dispatch(RecipeActions.addRecipe({recipe: this.recipe}));
       }
     }
     this.onCancel();
