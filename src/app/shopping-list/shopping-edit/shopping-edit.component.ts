@@ -13,7 +13,7 @@ import {AppState} from '../../store/app.reducer';
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
 
-  @ViewChild('form', {static: false})
+  @ViewChild('form')
   form: NgForm;
 
   editMode = false;
