@@ -5,6 +5,7 @@
     <ul class="list-group">
       <a class="list-group-item"
          style="cursor: pointer;"
+         [@addAndRemoveAnimation]
          *ngFor="let ingredient of (ingredients | async).ingredients; let i = index"
          (click)="onIngredientClicked(i)"
       >
