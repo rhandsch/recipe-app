@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "rob-learng"
+  },
+  "targets": {
+    "rob-learng": {
+      "hosting": {
+        "recipe-app": [
+          "rob-learng"
+        ]
+      }
+    }
   }
 }
